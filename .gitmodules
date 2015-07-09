@@ -1,3 +1,0 @@
-[submodule "dev-infra"]
-	path = dev-infra
-	url = https://github.com/kradhakrishnan/dev-infra.git
