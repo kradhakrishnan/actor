@@ -1,4 +1,10 @@
-SUBDIR = event-system		\
+ifndef OBJDIR
+OBJDIR=$(PWD)/obj
+endif
 
-include dev-infra/DefaultMakefile
-include dev-infra/MakefileRules
+all:
+	mkdir -p $(OBJDIR)
+	cd $(OBJDIR) && cmake .. && make -j`nproc`
+
+clean:
+	rm -r -f $(OBJDIR)
