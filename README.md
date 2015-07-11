@@ -1,3 +1,3 @@
 # event-system
 
-A generalized framework for building event driven asynchronous systems designed to take advantage of modern multi-core processor architecture. It heavily favors "Stagged Event Driven Architecture" (SEDA) event driver model. It can also be used as a "Reactor" event driver model. The project is designed to provide a generalized event system framework to build more sophiticated IO intensive applications like file systems, database etc -- written for modern hardware that leverages SSDs and high thoughput network devices.
+A generalized framework for building event driven asynchronous systems designed to take advantage of modern multi-core processor architecture. It heavily favors "Stagged Event Driven Architecture" (SEDA) event driver model. The system is ideal for building IO intensive, latency sensitive applications like database, filesystem etc that leverage high throughput devices like SSDs and support high end communication hardware like 10+ Gbps.
