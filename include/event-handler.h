@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/logger.h"
-#include "core/util.h"
+#include "logger.h"
+#include "util.h"
 
 namespace bblocks {
 
