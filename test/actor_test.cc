@@ -1,61 +1,27 @@
-#include <list>
-#include <memory>
-
-#include "actor.h"
-#include "iocore/unit-test.h"
-#include "iocore/sysconf.h"
-#include "iocore/logger.h"
+#include "actor_test.h"
 
 using namespace std;
 using namespace bblocks;
 
-class ActorTest : public UnitTest {};
-
-class Pinger;
-
-struct PingPongEvent
+TEST_F(ActorTest, PingPongReactorTest)
 {
-	PingPongEvent(Pinger * pinger) : count_(0), pinger_(pinger) {}
+	using namespace ppReactor;
 
-	int count_;
-	Pinger * pinger_;
-};
-
-atomic<int> exitCounter(SysConf::NumCores());
-
-class Pinger : public ThreadedReactor<PingPongEvent>
-{
-public:
-
-	Pinger(const std::string & name)
-		: ThreadedReactor<PingPongEvent>(name)
-		, log_(name)
-	{}
-
-	static const int MAX_EVENTS = 1000;
-
-protected:
-
-	void Handle(const PingPongEvent & event) override
-	{
-		INFO(log_) << this << " got event with count " << event.count_
-				   << " from " << event.pinger_;
-
-		if (event.count_ > MAX_EVENTS) {
-			--exitCounter;
-			return;
-		}
-		
-		PingPongEvent out(this);
-		out.count_ = event.count_ + 1;
-		event.pinger_->Send(out);
+	list<unique_ptr<Pinger> > pingers;
+	for (size_t i = 0; i < SysConf::NumCores(); i++) {
+		pingers.push_back(unique_ptr<Pinger>(new Pinger("pinger_" + i)));
 	}
 
-	const std::string log_;
-};
+	unique_ptr<Pinger> & main = *pingers.begin();
+	for (auto & p : pingers) {
+		p->Send(PingPongEvent(main.get()));
+	}
+}
 
-TEST_F(ActorTest, PingPongEvent)
+TEST_F(ActorTest, PingPongThreadedReactorTest)
 {
+	using namespace ppThreadedReactor;
+
 	list<unique_ptr<Pinger> > pingers;
 	for (size_t i = 0; i < SysConf::NumCores(); i++) {
 		pingers.push_back(unique_ptr<Pinger>(new Pinger("pinger_" + i)));

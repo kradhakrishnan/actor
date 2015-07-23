@@ -66,13 +66,13 @@ protected:
 // ......................................................... Reactor<EVENT> ....
 
 template<class EVENT>
-class Reactor : protected EventActor<EVENT>
+class Reactor : public EventActor<EVENT>
 {
 public:
 
 	void Send(const EVENT & event) override
 	{
-		Handle(event);
+		this->Handle(event);
 	}
 };
 
