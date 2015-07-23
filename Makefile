@@ -1,4 +1,11 @@
-include iocore/Makefile
+include iocore/cmake/DefaultMakefile
+
+all: base-all
+
+clean: base-clean
+	@cd iocore && make -j`nproc` clean
+
+test: base-test
 
 prep:
 	@echo 'ENV-SETUP'

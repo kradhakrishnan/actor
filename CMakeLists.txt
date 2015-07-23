@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-include (iocore/make/DefaultCMakeLists.txt)
+include (iocore/cmake/DefaultCMakeLists.txt)
 
 include_directories (include
 					 iocore/third-party/gtest-1.7.0
