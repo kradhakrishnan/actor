@@ -1,20 +1,20 @@
-ifndef OBJDIR
-OBJDIR=$(PWD)/obj
-endif
+include iocore/Makefile
 
-setup: cleanup
-	git submodule init
-	ln -s `pwd`/iocore/include include/iocore
+prep:
+	@echo 'ENV-SETUP'
+	@git submodule init
+	@rm -f include/iocore
+	@ln -s `pwd`/iocore/include include/iocore
+	@cd iocore && make clean all
+	@mkdir -p $(OBJDIR) && cp `find iocore | grep \.a$$` $(OBJDIR)
 
 update:
-	git submodule update
+	@echo 'ENV-UPDATE'
+	@git submodule update
+	@make -C iocore all
+	@cd iocore && make all
+	@mkdir -p $(OBJDIR) && cp `find iocore | grep \.a$$` $(OBJDIR)
 
-cleanup:
-	rm -f include/iocore
-
-all:
-	mkdir -p $(OBJDIR)
-	cd $(OBJDIR) && cmake .. && make -j`nproc`
-
-clean:
-	rm -r -f $ (OBJDIR)
+trash:
+	@echo 'ENV-CLEANUP'
+	@rm -f include/iocore

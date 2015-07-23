@@ -1,11 +1,15 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-project("event-system")
+include (iocore/make/DefaultCMakeLists.txt)
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
+include_directories (include
+					 iocore/third-party/gtest-1.7.0
+					 ${Boost_INCLUDE_DIR})
 
-include_directories(core/include)
+LINK_DIRECTORIES(${CMAKE_BINARY_DIR})
 
-set(CMAKE_CXX_FLAGS "-fPIC -Wall -std=c++11 -Werror -D__STDC_LIMIT_MACROS")
+add_executable (actor_test test/actor_test.cc)
 
-add_executable(event-system-test test/event-system-test.cc)
+target_link_libraries (actor_test gtest core pthread boost_regex)
+
+add_test(${RUN_TEST_CASE} ${CMAKE_BINARY_DIR}/actor_test)
