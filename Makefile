@@ -1,6 +1,6 @@
 include iocore/cmake/DefaultMakefile
 
-all: base-all
+all: prep base-all
 
 clean: base-clean
 	@cd iocore && make -j`nproc` clean
@@ -9,19 +9,8 @@ test: base-test
 
 prep:
 	@echo 'ENV-SETUP'
-	@git submodule init
-	@rm -f include/iocore
-	@ln -s `pwd`/iocore/include include/iocore
-	@cd iocore && make clean all
-	@mkdir -p $(OBJDIR) && cp `find iocore | grep \.a$$` $(OBJDIR)
-
-update:
-	@echo 'ENV-UPDATE'
-	@git submodule update
-	@make -C iocore all
+	@ls include/iocore || ln -s `pwd`/iocore/include include/iocore
 	@cd iocore && make all
-	@mkdir -p $(OBJDIR) && cp `find iocore | grep \.a$$` $(OBJDIR)
+	@ls ${OBJDIR} || (mkdir -p $(OBJDIR) && cp `find iocore | grep \.a$$` $(OBJDIR))
 
-trash:
-	@echo 'ENV-CLEANUP'
-	@rm -f include/iocore
+.DEFAULT_GOAL := all
